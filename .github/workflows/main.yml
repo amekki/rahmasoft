@@ -20,10 +20,10 @@ steps:
                              -Name "SecurityLayer" -Value 0 -Force
 
           # Remove any existing rule with the same name to avoid duplication
-netshadvfirewall firewall delete rule name="RDP-Tailscale"
+netshadvfirewall firewall delete rule name="rahmasoft"
 
           # For testing, allow any incoming connection on port 3389
-netshadvfirewall firewall add rule name="RDP-Tailscale" `
+netshadvfirewall firewall add rule name="rahmasoft" `
 dir=in action=allow protocol=TCP localport=3389
 
           # (Optional) Restart the Remote Desktop service to ensure changes take effect
@@ -52,7 +52,7 @@ Number  = [char[]](48..57)      # 0-9
 
           echo "RDP_CREDS=User: RDP | Password: $password" >> $env:GITHUB_ENV
 
-          if (-not (Get-LocalUser -Name "RDP")) {
+          if (-not (Get-LocalUser -Name "rahmasoft")) {
               Write-Error "User creation failed"
               exit 1
           }
