@@ -1,0 +1,1 @@
+{\n    "require": {\n        "php": "^8.0",\n        "smalot/pdfparser": "^0.15.1",\n        "ext-mysqli": "*",\n        "some/common-library": "^1.0"\n    }\n}
