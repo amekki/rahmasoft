@@ -411,6 +411,12 @@
                                 </svg>
                                 تحميل PDF
                             </button>
+                            <button onclick="regenerateSubject()" class="bg-secondary-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-secondary-700 transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                توليد جديد
+                            </button>
                         </div>
                     </div>
                     <div id="subject-paper" class="bg-white text-black p-12 shadow-2xl border border-slate-200 print-container">
@@ -656,13 +662,32 @@
                         questions: ['انشر وبسط العبارة E', 'حلل العبارة E إلى عامل من الدرجة الأولى', 'حل المعادلة E = 0'],
                         points: 6,
                         solutions: [{text: 'النشر: E = 3x² + 14x + 8', point: '2ن'}, {text: 'التحليل: E = (3x + 2)(x + 4)', point: '2ن'}, {text: 'الحلول: x = -2/3 أو x = -4', point: '2ن'}]
+                    },
+                    {
+                        content: 'الجملة التالية: { 2x + 3y = 12 ; x + y = 5 }',
+                        questions: ['حل الجملة السابقة جبرياً', 'مثل الحل بيانياً'],
+                        points: 4,
+                        solutions: [{text: 'x = 3, y = 2', point: '3ن'}, {text: 'التمثيل البياني صحيح', point: '1ن'}]
+                    },
+                    {
+                        content: 'إليك الدالة f المعرفة بـ: f(x) = 2x - 4',
+                        questions: ['احسب صورة العدد 3 بالدالة f', 'أوجد العدد الذي صورته 0 بالدالة f', 'مثل الدالة f بيانيا'],
+                        points: 5,
+                        solutions: [{text: 'f(3) = 2', point: '1ن'}, {text: 'العدد هو 2', point: '2ن'}, {text: 'تمثيل مستقيم يمر بـ (2,0) و (0,-4)', point: '2ن'}]
                     }
                 ],
-                situation: {
-                    context: 'يريد فلاح تسييج قطعة أرض مستطيلة الشكل بعداها 40m و 30m، بحيث يترك مدخلاً طوله 5m.',
-                    supports: ['رسم تخطيطي لقطعة الأرض', 'سعر المتر الواحد من السياج: 1500 دج'],
-                    instructions: ['احسب طول السياج اللازم', 'احسب التكلفة الإجمالية لعملية التسييج']
-                }
+                situations: [
+                    {
+                        context: 'يريد فلاح تسييج قطعة أرض مستطيلة الشكل بعداها 40m و 30m، بحيث يترك مدخلاً طوله 5m.',
+                        supports: ['رسم تخطيطي لقطعة الأرض', 'سعر المتر الواحد من السياج: 1500 دج'],
+                        instructions: ['احسب طول السياج اللازم', 'احسب التكلفة الإجمالية لعملية التسييج']
+                    },
+                    {
+                        context: 'يخطط مقاول لبناء مسبح نصف قطره 7m وعمقه 2m.',
+                        supports: ['مساحة الدائرة: πr²', 'كلفة المتر المكعب من الماء: 50 دج'],
+                        instructions: ['احسب حجم المسبح', 'احسب تكلفة ملء المسبح بالكامل']
+                    }
+                ]
             },
             'الفيزياء': {
                 exercises: [
@@ -671,6 +696,12 @@
                         questions: ['ما نوع الشحنة التي يحملها قضيب الإيبونيت؟', 'ماذا تلاحظ على ورقتي الكاشف؟ فسر ذلك.'],
                         points: 4,
                         solutions: [{text: 'شحنة سالبة', point: '1ن'}, {text: 'تنافر الورقتين بسبب التكهرب بالتأثير', point: '3ن'}]
+                    },
+                    {
+                        content: 'تتحرك سيارة بسرعة ثابتة قدرها 72km/h.',
+                        questions: ['حول السرعة إلى وحدة m/s', 'احسب المسافة المقطوعة خلال 10 دقائق'],
+                        points: 4,
+                        solutions: [{text: 'السرعة = 20 m/s', point: '2ن'}, {text: 'المسافة = 12000 m', point: '2ن'}]
                     }
                 ]
             },
@@ -681,51 +712,105 @@
                         questions: ['وضح الأطروحة القائلة بالانفصال بينهما.', 'ناقش هذه الأطروحة موضحاً النقد الموجه لها.'],
                         points: 12,
                         solutions: [{text: 'عرض الموقف الاتجاه الذهني (ديكارت، ألان)', point: '6ن'}, {text: 'النقد والمناقشة: الإدراك ليس عملية عقلية خالصة', point: '6ن'}]
+                    },
+                    {
+                        content: 'هل الفلسفة ضرورية في عصر العلم؟',
+                        questions: ['عرض الموقف القائل بعدم جدواها', 'بيان حاجة الإنسان المعاصر للتفلسف'],
+                        points: 12,
+                        solutions: [{text: 'عرض الموقف الوضعي', point: '6ن'}, {text: 'التأكيد على أن العلم يطرح تساؤلات لا يجيب عنها إلا الفلسفة', point: '6ن'}]
                     }
                 ],
-                situation: {
-                    context: 'دافع عن الأطروحة القائلة: "إن التجربة هي المصدر الوحيد لكل معارفنا".',
-                    supports: ['أقوال لجون لوك ودافيد هيوم', 'أمثلة من الواقع الحسي'],
-                    instructions: ['اكتب مقالاً فلسفياً تدافع فيه عن هذا الموقف.', 'التزم بمنهجية الاستقصاء بالوضع.']
-                }
+                situations: [
+                    {
+                        context: 'دافع عن الأطروحة القائلة: "إن التجربة هي المصدر الوحيد لكل معارفنا".',
+                        supports: ['أقوال لجون لوك ودافيد هيوم', 'أمثلة من الواقع الحسي'],
+                        instructions: ['اكتب مقالاً فلسفياً تدافع فيه عن هذا الموقف.', 'التزم بمنهجية الاستقصاء بالوضع.']
+                    },
+                    {
+                        context: 'قيل: "الرياضيات تستمد يقينها من العقل وحده". فند هذا القول.',
+                        supports: ['تاريخ الرياضيات في الحضارات القديمة', 'دور الحدس الحسي'],
+                        instructions: ['اكتب مقالاً توضح فيه تهافت هذا القول.', 'استخدم منهجية الاستقصاء بالرفع.']
+                    }
+                ]
             }
         };
 
-        function generateSubject(event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
+        function regenerateSubject() {
+            // Re-trigger generation with current state but bypass form event
+            const fakeEvent = {
+                preventDefault: () => {},
+                target: {
+                    querySelector: () => ({ disabled: false, innerHTML: '' }),
+                    elements: [] // Simplified for demonstration
+                }
+            };
 
-            // Show loading state
-            const submitBtn = event.target.querySelector('button[type="submit"]');
-            const originalBtnHtml = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `
-                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                جاري التوليد...
-            `;
+            // To make it easier, we'll store the last options in state
+            if (state.lastOptions) {
+                generateSubject(null, state.lastOptions);
+            } else {
+                navigateTo('dashboard');
+            }
+        }
+
+        function generateSubject(event, forcedOptions = null) {
+            if (event) event.preventDefault();
+
+            let options = forcedOptions;
+            if (!options && event) {
+                const formData = new FormData(event.target);
+                options = {
+                    type: formData.get('type'),
+                    term: formData.get('term'),
+                    duration: formData.get('duration'),
+                    difficulty: formData.get('difficulty'),
+                    includeSolution: formData.get('include_solution') === 'on'
+                };
+            }
+
+            state.lastOptions = options;
+
+            // Show loading state if we have a button
+            const submitBtn = event ? event.target.querySelector('button[type="submit"]') : null;
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    جاري التوليد...
+                `;
+            }
 
             setTimeout(() => {
                 const subjectName = state.selectedSubject;
                 const data = mockData[subjectName] || mockData['الرياضيات']; // Fallback
 
+                // Randomly select 2 exercises and 1 situation
+                const shuffledExercises = [...data.exercises].sort(() => 0.5 - Math.random());
+                const selectedExercises = shuffledExercises.slice(0, 2);
+
+                let selectedSituation = null;
+                if (data.situations && data.situations.length > 0) {
+                    selectedSituation = data.situations[Math.floor(Math.random() * data.situations.length)];
+                }
+
                 state.generatedSubject = {
                     level: state.selectedLevel,
                     branch: state.selectedBranch,
                     subject: subjectName,
-                    type: formData.get('type'),
-                    term: formData.get('term'),
-                    duration: formData.get('duration'),
-                    difficulty: formData.get('difficulty'),
-                    includeSolution: formData.get('include_solution') === 'on',
-                    exercises: data.exercises,
-                    situation: data.situation
+                    type: options.type,
+                    term: options.term,
+                    duration: options.duration,
+                    difficulty: options.difficulty,
+                    includeSolution: options.includeSolution,
+                    exercises: selectedExercises,
+                    situation: selectedSituation
                 };
 
                 navigateTo('result');
-            }, 1500);
+            }, 1000);
         }
 
         function renderDashboardForm() {
