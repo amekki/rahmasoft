@@ -196,6 +196,7 @@
             selectedBranch: null,
             selectedSubject: null,
             generatedSubject: null,
+            usedExercises: [], // Track IDs to avoid immediate repetition
             libraryFilters: {
                 level: '',
                 subject: '',
@@ -652,40 +653,66 @@
             'الرياضيات': {
                 exercises: [
                     {
-                        content: 'أوجد القاسم المشترك الأكبر للعددين 1053 و 825 باستخدام خوارزمية إقليدس.',
-                        questions: ['احسب PGCD(1053, 825)', 'اكتب الكسر 825/1053 على شكل كسر غير قابل للاختزال'],
+                        content: 'أوجد القاسم المشترك الأكبر للعددين {{num1}} و {{num2}} باستخدام خوارزمية إقليدس.',
+                        questions: ['احسب PGCD({{num1}}, {{num2}})', 'اكتب الكسر {{num2}}/{{num1}} على شكل كسر غير قابل للاختزال'],
                         points: 3,
-                        solutions: [{text: 'PGCD = 3', point: '2ن'}, {text: 'الكسر المختزل هو 25/31', point: '1ن'}]
+                        type: 'math_pgcd'
                     },
                     {
-                        content: 'لتكن العبارة E حيث: E = (2x + 3)² - (x - 1)²',
+                        content: 'لتكن العبارة E حيث: E = ({{a}}x + {{b}})² - (x - {{c}})²',
                         questions: ['انشر وبسط العبارة E', 'حلل العبارة E إلى عامل من الدرجة الأولى', 'حل المعادلة E = 0'],
                         points: 6,
-                        solutions: [{text: 'النشر: E = 3x² + 14x + 8', point: '2ن'}, {text: 'التحليل: E = (3x + 2)(x + 4)', point: '2ن'}, {text: 'الحلول: x = -2/3 أو x = -4', point: '2ن'}]
+                        type: 'math_expansion'
                     },
                     {
-                        content: 'الجملة التالية: { 2x + 3y = 12 ; x + y = 5 }',
+                        content: 'حل الجملة التالية: { {{a}}x + {{b}}y = {{c}} ; x + y = {{d}} }',
                         questions: ['حل الجملة السابقة جبرياً', 'مثل الحل بيانياً'],
                         points: 4,
-                        solutions: [{text: 'x = 3, y = 2', point: '3ن'}, {text: 'التمثيل البياني صحيح', point: '1ن'}]
+                        type: 'math_system'
                     },
                     {
-                        content: 'إليك الدالة f المعرفة بـ: f(x) = 2x - 4',
-                        questions: ['احسب صورة العدد 3 بالدالة f', 'أوجد العدد الذي صورته 0 بالدالة f', 'مثل الدالة f بيانيا'],
+                        content: 'إليك الدالة f المعرفة بـ: f(x) = {{a}}x - {{b}}',
+                        questions: ['احسب صورة العدد {{c}} بالدالة f', 'أوجد العدد الذي صورته 0 بالدالة f', 'مثل الدالة f بيانيا'],
                         points: 5,
-                        solutions: [{text: 'f(3) = 2', point: '1ن'}, {text: 'العدد هو 2', point: '2ن'}, {text: 'تمثيل مستقيم يمر بـ (2,0) و (0,-4)', point: '2ن'}]
+                        type: 'math_function'
+                    },
+                    {
+                        content: 'ABC مثلث قائم في A حيث AB = {{num1}}cm و AC = {{num2}}cm.',
+                        questions: ['احسب طول الوتر BC', 'احسب cos(ABC) واستنتج قيس الزاوية بالتدوير'],
+                        points: 4,
+                        type: 'math_trig'
+                    },
+                    {
+                        content: 'مخروط دوراني قطر قاعدته {{d}}cm وارتفاعه {{h}}cm.',
+                        questions: ['احسب مساحة القاعدة', 'احسب حجم المخروط بالتدوير'],
+                        points: 4,
+                        type: 'math_geometry'
+                    },
+                    {
+                        content: 'إليك السلسلة الإحصائية التالية: {{list}}',
+                        questions: ['نظم المعطيات في جدول تكراري', 'احسب المتوسط الحسابي للسلسلة'],
+                        points: 5,
+                        type: 'math_stats'
+                    },
+                    {
+                        content: 'في معلم متعامد ومتجانس، لتكن النقط A({{x1}},{{y1}}) و B({{x2}},{{y2}}).',
+                        questions: ['احسب إحداثيات شعاع AB', 'احسب طول القطعة AB'],
+                        points: 3,
+                        type: 'math_vectors'
                     }
                 ],
                 situations: [
                     {
-                        context: 'يريد فلاح تسييج قطعة أرض مستطيلة الشكل بعداها 40m و 30m، بحيث يترك مدخلاً طوله 5m.',
-                        supports: ['رسم تخطيطي لقطعة الأرض', 'سعر المتر الواحد من السياج: 1500 دج'],
-                        instructions: ['احسب طول السياج اللازم', 'احسب التكلفة الإجمالية لعملية التسييج']
+                        context: 'يريد فلاح تسييج قطعة أرض مستطيلة الشكل بعداها {{num1}}m و {{num2}}m، بحيث يترك مدخلاً طوله {{num3}}m.',
+                        supports: ['رسم تخطيطي لقطعة الأرض', 'سعر المتر الواحد من السياج: {{price}} دج'],
+                        instructions: ['احسب طول السياج اللازم', 'احسب التكلفة الإجمالية لعملية التسييج'],
+                        type: 'math_sit_farm'
                     },
                     {
-                        context: 'يخطط مقاول لبناء مسبح نصف قطره 7m وعمقه 2m.',
-                        supports: ['مساحة الدائرة: πr²', 'كلفة المتر المكعب من الماء: 50 دج'],
-                        instructions: ['احسب حجم المسبح', 'احسب تكلفة ملء المسبح بالكامل']
+                        context: 'يخطط مقاول لبناء مسبح نصف قطره {{r}}m وعمقه {{h}}m.',
+                        supports: ['مساحة الدائرة: πr²', 'كلفة المتر المكعب من الماء: {{price}} دج'],
+                        instructions: ['احسب حجم المسبح', 'احسب تكلفة ملء المسبح بالكامل'],
+                        type: 'math_sit_pool'
                     }
                 ]
             },
@@ -698,10 +725,45 @@
                         solutions: [{text: 'شحنة سالبة', point: '1ن'}, {text: 'تنافر الورقتين بسبب التكهرب بالتأثير', point: '3ن'}]
                     },
                     {
-                        content: 'تتحرك سيارة بسرعة ثابتة قدرها 72km/h.',
-                        questions: ['حول السرعة إلى وحدة m/s', 'احسب المسافة المقطوعة خلال 10 دقائق'],
+                        content: 'تتحرك سيارة بسرعة ثابتة قدرها {{v}}km/h.',
+                        questions: ['حول السرعة إلى وحدة m/s', 'احسب المسافة المقطوعة خلال {{t}} دقائق'],
                         points: 4,
-                        solutions: [{text: 'السرعة = 20 m/s', point: '2ن'}, {text: 'المسافة = 12000 m', point: '2ن'}]
+                        type: 'physics_motion'
+                    },
+                    {
+                        content: 'نغمر مسماراً حديدياً في محلول كبريتات النحاس.',
+                        questions: ['ماذا تلاحظ بعد مدة زمنية؟', 'اكتب المعادلة الكيميائية للتفاعل الحاصل.'],
+                        points: 5,
+                        solutions: [{text: 'ترسب طبقة حمراء واختفاء اللون الأزرق', point: '2ن'}, {text: 'Fe + CuSO4 -> FeSO4 + Cu', point: '3ن'}]
+                    },
+                    {
+                        content: 'ثقل جسم على سطح الأرض هو P = {{p}}N.',
+                        questions: ['احسب كتلة هذا الجسم (g = 10N/kg)', 'مثل شعاع الثقل بلم السلم 1cm لكل {{s}}N'],
+                        points: 4,
+                        type: 'physics_weight'
+                    }
+                ]
+            },
+            'اللغة العربية': {
+                exercises: [
+                    {
+                        content: 'اقرأ النص التالي بتمعن ثم أجب عن الأسئلة: (نص حول التطور العلمي)',
+                        questions: ['حدد الفكرة العامة للنص', 'اشرح الكلمات التالية: (مبتكر، الرقي)', 'استخرج من النص طباقاً وبين نوعه'],
+                        points: 6,
+                        solutions: [{text: 'تأثير التطور العلمي على حياة الإنسان', point: '2ن'}, {text: 'مبتكر: مخترع / الرقي: التطور والازدهار', point: '2ن'}, {text: 'العلم # الجهل (إيجاب)', point: '2ن'}]
+                    },
+                    {
+                        content: 'أعرب ما تحته خط في الجملة: "العلمُ يُنيرُ العقولَ".',
+                        questions: ['أعرب كلمة العلمُ', 'أعرب كلمة العقولَ'],
+                        points: 4,
+                        solutions: [{text: 'العلم: مبتدأ مرفوع بالضمة', point: '2ن'}, {text: 'العقول: مفعول به منصوب بالفتحة', point: '2ن'}]
+                    }
+                ],
+                situations: [
+                    {
+                        context: 'التطور التكنولوجي سلاح ذو حدين.',
+                        instructions: ['اكتب فقرة لا تقل عن 10 أسطر تتحدث فيها عن إيجابيات وسلبيات الهاتف المحمول.', 'موظفاً أسلوب تعجب واسم تفضيل.'],
+                        type: 'arabic_sit_tech'
                     }
                 ]
             },
@@ -718,6 +780,12 @@
                         questions: ['عرض الموقف القائل بعدم جدواها', 'بيان حاجة الإنسان المعاصر للتفلسف'],
                         points: 12,
                         solutions: [{text: 'عرض الموقف الوضعي', point: '6ن'}, {text: 'التأكيد على أن العلم يطرح تساؤلات لا يجيب عنها إلا الفلسفة', point: '6ن'}]
+                    },
+                    {
+                        content: 'هل اللغة عائق أم وسيلة للفكر؟',
+                        questions: ['عرض الأطروحة الاتجاه الثنائي', 'مناقشة الاتجاه الواحدي'],
+                        points: 12,
+                        solutions: [{text: 'برغسون: اللغة قبور المعاني', point: '6ن'}, {text: 'ميرلوبونتي: الفكر يسكن في اللغة', point: '6ن'}]
                     }
                 ],
                 situations: [
@@ -753,6 +821,74 @@
             }
         }
 
+        function populateTemplate(item) {
+            if (!item.type) return item;
+
+            const newItem = JSON.parse(JSON.stringify(item));
+            const vars = {};
+
+            const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+            if (item.type === 'math_pgcd') {
+                vars.num1 = rand(500, 2000);
+                vars.num2 = rand(100, 500);
+                const gcd = (a, b) => b ? gcd(b, a % b) : a;
+                const res = gcd(vars.num1, vars.num2);
+                newItem.solutions = [
+                    {text: `PGCD(${vars.num1}, ${vars.num2}) = ${res}`, point: '2ن'},
+                    {text: `الكسر المختزل هو ${vars.num2/res}/${vars.num1/res}`, point: '1ن'}
+                ];
+            } else if (item.type === 'math_expansion') {
+                vars.a = rand(2, 5); vars.b = rand(1, 9); vars.c = rand(1, 5);
+                newItem.solutions = [{text: 'خطوات النشر والتبسيط صحيحة', point: '2ن'}, {text: 'التحليل صحيح', point: '2ن'}, {text: 'حل المعادلة صحيح', point: '2ن'}];
+            } else if (item.type === 'math_system') {
+                vars.a = rand(2, 4); vars.b = rand(2, 5); vars.c = rand(10, 30); vars.d = rand(5, 10);
+                newItem.solutions = [{text: 'إيجاد الثنائية (x,y) صحيح', point: '3ن'}, {text: 'التمثيل البياني صحيح', point: '1ن'}];
+            } else if (item.type === 'math_function') {
+                vars.a = rand(2, 6); vars.b = rand(1, 10); vars.c = rand(-5, 5);
+                newItem.solutions = [{text: `f(${vars.c}) = ${vars.a * vars.c - vars.b}`, point: '1ن'}, {text: `x = ${vars.b/vars.a}`, point: '2ن'}, {text: 'الرسم دقيق', point: '2ن'}];
+            } else if (item.type === 'physics_motion') {
+                vars.v = rand(40, 120); vars.t = rand(5, 60);
+                newItem.solutions = [{text: `v = ${Math.round(vars.v/3.6)} m/s`, point: '2ن'}, {text: `d = ${Math.round((vars.v/3.6) * vars.t * 60)} m`, point: '2ن'}];
+            } else if (item.type === 'physics_weight') {
+                vars.p = rand(10, 500); vars.s = rand(5, 20);
+                newItem.solutions = [{text: `m = ${vars.p/10} kg`, point: '2ن'}, {text: `طول الشعاع = ${vars.p/vars.s} cm`, point: '2ن'}];
+            } else if (item.type.includes('math_trig')) {
+                vars.num1 = rand(3, 8); vars.num2 = rand(4, 10);
+                newItem.solutions = [{text: `BC = ${Math.sqrt(vars.num1**2 + vars.num2**2).toFixed(2)} cm`, point: '2ن'}, {text: 'قيس الزاوية صحيح', point: '2ن'}];
+            } else if (item.type === 'math_stats') {
+                vars.list = Array.from({length: 8}, () => rand(5, 20)).join(' ، ');
+                newItem.solutions = [{text: 'الجدول التكراري منظم', point: '2ن'}, {text: 'المتوسط الحسابي صحيح', point: '3ن'}];
+            } else if (item.type === 'math_geometry') {
+                vars.d = rand(5, 15); vars.h = rand(10, 20);
+                newItem.solutions = [{text: 'مساحة القاعدة صحيحة', point: '2ن'}, {text: 'حجم المخروط صحيح', point: '2ن'}];
+            } else if (item.type === 'math_vectors') {
+                vars.x1 = rand(-5, 5); vars.y1 = rand(-5, 5); vars.x2 = rand(-5, 5); vars.y2 = rand(-5, 5);
+                newItem.solutions = [{text: `AB(${vars.x2-vars.x1}, ${vars.y2-vars.y1})`, point: '1.5ن'}, {text: 'طول AB صحيح', point: '1.5ن'}];
+            } else if (item.type === 'math_sit_farm') {
+                vars.num1 = rand(30, 100); vars.num2 = rand(20, 50); vars.num3 = rand(3, 7); vars.price = rand(1000, 3000);
+                newItem.solutions = [{text: 'طول السياج صحيح', point: '4ن'}, {text: 'التكلفة الإجمالية صحيحة', point: '4ن'}];
+            } else if (item.type === 'math_sit_pool') {
+                vars.r = rand(3, 10); vars.h = rand(1, 3); vars.price = rand(40, 100);
+                newItem.solutions = [{text: 'حجم المسبح صحيح', point: '4ن'}, {text: 'تكلفة الملء صحيحة', point: '4ن'}];
+            }
+
+            if (!newItem.solutions) newItem.solutions = [{text: 'الإجابة صحيحة وفق المنهجية', point: `${newItem.points}ن`}];
+
+            // Replace placeholders in content, context, and questions
+            const replace = (str) => {
+                if (!str) return str;
+                return str.replace(/{{(\w+)}}/g, (match, key) => vars[key] !== undefined ? vars[key] : match);
+            };
+
+            newItem.content = replace(newItem.content);
+            newItem.context = replace(newItem.context);
+            if (newItem.questions) newItem.questions = newItem.questions.map(replace);
+            if (newItem.supports) newItem.supports = newItem.supports.map(replace);
+
+            return newItem;
+        }
+
         function generateSubject(event, forcedOptions = null) {
             if (event) event.preventDefault();
 
@@ -770,7 +906,6 @@
 
             state.lastOptions = options;
 
-            // Show loading state if we have a button
             const submitBtn = event ? event.target.querySelector('button[type="submit"]') : null;
             if (submitBtn) {
                 submitBtn.disabled = true;
@@ -785,15 +920,27 @@
 
             setTimeout(() => {
                 const subjectName = state.selectedSubject;
-                const data = mockData[subjectName] || mockData['الرياضيات']; // Fallback
+                const data = mockData[subjectName] || mockData['الرياضيات'];
 
-                // Randomly select 2 exercises and 1 situation
-                const shuffledExercises = [...data.exercises].sort(() => 0.5 - Math.random());
-                const selectedExercises = shuffledExercises.slice(0, 2);
+                // Prioritize fresh exercises
+                const freshExercises = data.exercises.filter(ex => !state.usedExercises.includes(ex.content.substring(0, 20)));
+                const pool = freshExercises.length >= 2 ? freshExercises : data.exercises;
+
+                const shuffledExercises = [...pool].sort(() => 0.5 - Math.random());
+                const selectedExercises = shuffledExercises.slice(0, 2).map(populateTemplate);
+
+                // Update used list
+                selectedExercises.forEach(ex => {
+                    const id = ex.content.substring(0, 20);
+                    if (!state.usedExercises.includes(id)) {
+                        state.usedExercises.push(id);
+                        if (state.usedExercises.length > 10) state.usedExercises.shift();
+                    }
+                });
 
                 let selectedSituation = null;
                 if (data.situations && data.situations.length > 0) {
-                    selectedSituation = data.situations[Math.floor(Math.random() * data.situations.length)];
+                    selectedSituation = populateTemplate(data.situations[Math.floor(Math.random() * data.situations.length)]);
                 }
 
                 state.generatedSubject = {
@@ -810,7 +957,7 @@
                 };
 
                 navigateTo('result');
-            }, 1000);
+            }, 800);
         }
 
         function renderDashboardForm() {
