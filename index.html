@@ -200,7 +200,7 @@
             libraryFilters: {
                 level: '',
                 subject: '',
-                type: ''
+                search: ''
             }
         };
 
@@ -365,24 +365,27 @@
             library: () => `
                 <div class="fade-in">
                     <h2 class="text-3xl font-bold mb-8">مكتبة المواضيع</h2>
-                    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl mb-8 flex flex-wrap gap-4 items-end">
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl mb-8 flex flex-wrap gap-4 items-end no-print">
                         <div class="flex-1 min-w-[200px]">
                             <label class="block text-sm font-bold mb-2">المستوى</label>
-                            <select id="filter-level" class="w-full">
-                                <option value="">الكل</option>
-                                <option value="4am">الرابعة متوسط</option>
-                                <option value="3as">الثالثة ثانوي</option>
+                            <select id="filter-level" class="w-full" onchange="updateLibraryFilters('level', this.value)">
+                                <option value="" ${state.libraryFilters.level === '' ? 'selected' : ''}>الكل</option>
+                                <option value="4am" ${state.libraryFilters.level === '4am' ? 'selected' : ''}>الرابعة متوسط</option>
+                                <option value="3as" ${state.libraryFilters.level === '3as' ? 'selected' : ''}>الثالثة ثانوي</option>
                             </select>
                         </div>
                         <div class="flex-1 min-w-[200px]">
                             <label class="block text-sm font-bold mb-2">المادة</label>
-                            <select id="filter-subject" class="w-full">
+                            <select id="filter-subject" class="w-full" onchange="updateLibraryFilters('subject', this.value)">
                                 <option value="">الكل</option>
+                                ${['الرياضيات', 'الفيزياء', 'اللغة العربية', 'الفلسفة'].map(s => `
+                                    <option value="${s}" ${state.libraryFilters.subject === s ? 'selected' : ''}>${s}</option>
+                                `).join('')}
                             </select>
                         </div>
                         <div class="flex-1 min-w-[200px]">
                             <label class="block text-sm font-bold mb-2">البحث</label>
-                            <input type="text" placeholder="ابحث في المواضيع..." class="w-full">
+                            <input type="text" placeholder="ابحث في المواضيع..." class="w-full" value="${state.libraryFilters.search}" oninput="updateLibraryFilters('search', this.value)">
                         </div>
                     </div>
                     <div id="library-results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -498,16 +501,33 @@
             navigateTo('dashboard');
         }
 
+        function updateLibraryFilters(key, value) {
+            state.libraryFilters[key] = value;
+            renderLibrary();
+        }
+
+        function previewLibraryItem(index) {
+            const item = state.libraryData[index];
+            if (!item) return;
+
+            state.generatedSubject = populateTemplate(item);
+            state.selectedSubject = item.subject;
+            state.selectedLevel = item.level;
+            state.selectedBranch = item.branch;
+
+            navigateTo('result');
+        }
+
         function getSubjectsForLevel(level, branch) {
             if (level === '4am' || level === 'bem') {
                 return ['الرياضيات', 'اللغة العربية', 'العلوم الطبيعية', 'الفيزياء', 'اللغة الفرنسية', 'اللغة الإنجليزية', 'التاريخ والجغرافيا', 'التربية الإسلامية', 'التربية المدنية'];
             }
             // 3AS / BAC subjects depend on branch
             const subjectsMap = {
-                'علوم تجريبية': ['العلوم الطبيعية', 'الفيزياء', 'الرياضيات', 'الفلسفة', 'العربية', 'الفرنسية', 'الإنجليزية', 'التاريخ والجغرافيا', 'التربية الإسلامية'],
-                'رياضيات': ['الرياضيات', 'الفيزياء', 'العلوم الطبيعية', 'الفلسفة', 'العربية', 'الفرنسية', 'الإنجليزية', 'التاريخ والجغرافيا', 'التربية الإسلامية'],
-                'تقني رياضي': ['التكنولوجيا', 'الرياضيات', 'الفيزياء', 'الفلسفة', 'العربية', 'الفرنسية', 'الإنجليزية', 'التاريخ والجغرافيا', 'التربية الإسلامية'],
-                'تسيير واقتصاد': ['المحاسبة', 'الاقتصاد', 'القانون', 'الرياضيات', 'الفلسفة', 'العربية', 'الفرنسية', 'الإنجليزية', 'التاريخ والجغرافيا', 'التربية الإسلامية'],
+                'علوم تجريبية': ['العلوم الطبيعية', 'الفيزياء', 'الرياضيات', 'الفلسفة', 'اللغة العربية', 'اللغة الفرنسية', 'اللغة الإنجليزية', 'التاريخ والجغرافيا', 'التربية الإسلامية'],
+                'رياضيات': ['الرياضيات', 'الفيزياء', 'العلوم الطبيعية', 'الفلسفة', 'اللغة العربية', 'اللغة الفرنسية', 'اللغة الإنجليزية', 'التاريخ والجغرافيا', 'التربية الإسلامية'],
+                'تقني رياضي': ['التكنولوجيا', 'الرياضيات', 'الفيزياء', 'الفلسفة', 'اللغة العربية', 'اللغة الفرنسية', 'اللغة الإنجليزية', 'التاريخ والجغرافيا', 'التربية الإسلامية'],
+                'تسيير واقتصاد': ['المحاسبة', 'الاقتصاد', 'القانون', 'الرياضيات', 'الفلسفة', 'اللغة العربية', 'اللغة الفرنسية', 'اللغة الإنجليزية', 'التاريخ والجغرافيا', 'التربية الإسلامية'],
                 'آداب وفلسفة': ['الفلسفة', 'اللغة العربية', 'التاريخ والجغرافيا', 'اللغة الفرنسية', 'اللغة الإنجليزية', 'الرياضيات', 'التربية الإسلامية'],
                 'لغات أجنبية': ['اللغة الأجنبية الثالثة', 'اللغة العربية', 'الفلسفة', 'التاريخ والجغرافيا', 'اللغة الفرنسية', 'اللغة الإنجليزية', 'الرياضيات', 'التربية الإسلامية']
             };
@@ -516,32 +536,53 @@
 
         function renderLibrary() {
             const resultsContainer = document.getElementById('library-results');
-            const subjects = ['الرياضيات', 'الفيزياء', 'العلوم الطبيعية', 'الفلسفة'];
-            const types = ['فرض', 'اختبار', 'بكالوريا'];
 
-            // Generate some mock library items
-            let html = '';
-            for (let i = 1; i <= 6; i++) {
-                const sub = subjects[Math.floor(Math.random() * subjects.length)];
-                const typ = types[Math.floor(Math.random() * types.length)];
-                html += `
-                    <div class="subject-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
-                        <div class="p-6">
-                            <div class="flex justify-between items-start mb-4">
-                                <span class="bg-primary-100 dark:bg-primary-900/30 text-primary-600 text-xs font-bold px-2 py-1 rounded">${typ}</span>
-                                <span class="text-slate-400 text-xs">2023/2024</span>
-                            </div>
-                            <h4 class="font-bold text-lg mb-2">${sub} - نموذج رقم ${i}</h4>
-                            <p class="text-sm text-slate-500 mb-4">مستوى الثالثة ثانوي - شعبة علوم تجريبية</p>
-                            <div class="flex gap-2">
-                                <button class="flex-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 py-2 rounded-lg text-sm font-bold transition-all">معاينة</button>
-                                <button class="flex-1 bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg text-sm font-bold transition-all">تحميل</button>
-                            </div>
-                        </div>
+            // Initialize library data if not exists
+            if (!state.libraryData) {
+                state.libraryData = [
+                    { title: 'اختبار الفصل الأول في الرياضيات', level: '4am', subject: 'الرياضيات', type: 'اختبار', term: '1', duration: '90 دقيقة', includeSolution: true, exercises: [mockData['الرياضيات'].exercises[0], mockData['الرياضيات'].exercises[1]], situation: mockData['الرياضيات'].situations[0] },
+                    { title: 'فرض الثلاثي الثاني - فيزياء', level: '4am', subject: 'الفيزياء', type: 'فرض', term: '2', duration: '60 دقيقة', includeSolution: true, exercises: [mockData['الفيزياء'].exercises[0], mockData['الفيزياء'].exercises[1]] },
+                    { title: 'نموذج بكالوريا تجريبي - فلسفة', level: '3as', branch: 'آداب وفلسفة', subject: 'الفلسفة', type: 'امتحان', term: '3', duration: '120 دقيقة', includeSolution: true, exercises: [mockData['الفلسفة'].exercises[0]], situation: mockData['الفلسفة'].situations[0] },
+                    { title: 'تمارين مراجعة شاملة - رياضيات', level: '3as', branch: 'علوم تجريبية', subject: 'الرياضيات', type: 'مراجعة شاملة', term: '1', duration: '120 دقيقة', includeSolution: true, exercises: [mockData['الرياضيات'].exercises[2], mockData['الرياضيات'].exercises[3]] },
+                    { title: 'موضوع مقترح لشهادة التعليم المتوسط', level: '4am', subject: 'اللغة العربية', type: 'موضوع شهادة', term: '3', duration: '120 دقيقة', includeSolution: true, exercises: [mockData['اللغة العربية'].exercises[0], mockData['اللغة العربية'].exercises[1]], situation: mockData['اللغة العربية'].situations[0] },
+                    { title: 'اختبار تجريبي في الفيزياء', level: '3as', branch: 'رياضيات', subject: 'الفيزياء', type: 'اختبار', term: '2', duration: '120 دقيقة', includeSolution: true, exercises: [mockData['الفيزياء'].exercises[2], mockData['الفيزياء'].exercises[3]] }
+                ];
+            }
+
+            const filtered = state.libraryData.filter(item => {
+                const matchesLevel = !state.libraryFilters.level || item.level === state.libraryFilters.level;
+                const matchesSubject = !state.libraryFilters.subject || item.subject === state.libraryFilters.subject;
+                const matchesSearch = !state.libraryFilters.search || item.title.includes(state.libraryFilters.search) || item.subject.includes(state.libraryFilters.search);
+                return matchesLevel && matchesSubject && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="col-span-full py-20 text-center">
+                        <div class="text-6xl mb-4">🔍</div>
+                        <h3 class="text-xl font-bold mb-2">لا توجد نتائج مطابقة</h3>
+                        <p class="text-slate-500">حاول تغيير فلاتر البحث للحصول على نتائج أكثر.</p>
                     </div>
                 `;
+                return;
             }
-            resultsContainer.innerHTML = html;
+
+            resultsContainer.innerHTML = filtered.map((item, i) => `
+                <div class="subject-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-primary-100 dark:bg-primary-900/30 text-primary-600 text-xs font-bold px-2 py-1 rounded">${item.type}</span>
+                            <span class="text-slate-400 text-xs">${item.term ? `الفصل ${item.term}` : 'مراجعة'}</span>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">${item.title}</h4>
+                        <p class="text-sm text-slate-500 mb-4">${item.level === '4am' ? 'الرابعة متوسط' : `الثالثة ثانوي (${item.branch || ''})`} - ${item.subject}</p>
+                        <div class="flex gap-2">
+                            <button onclick="previewLibraryItem(${state.libraryData.indexOf(item)})" class="flex-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 py-2 rounded-lg text-sm font-bold transition-all">معاينة</button>
+                            <button onclick="previewLibraryItem(${state.libraryData.indexOf(item)})" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg text-sm font-bold transition-all">تحميل</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function renderResult() {
@@ -594,6 +635,7 @@
                             <p class="font-bold mb-2">السياق:</p>
                             <p>${s.situation.context}</p>
                         </div>
+                        ${s.situation.supports && s.situation.supports.length > 0 ? `
                         <div class="mb-4">
                             <p class="font-bold mb-2">السندات:</p>
                             <div class="grid grid-cols-2 gap-4">
@@ -602,6 +644,7 @@
                                 `).join('')}
                             </div>
                         </div>
+                        ` : ''}
                         <div>
                             <p class="font-bold mb-2">التعليمات:</p>
                             <ul class="list-decimal list-inside space-y-2 mr-4">
@@ -800,6 +843,55 @@
                         instructions: ['اكتب مقالاً توضح فيه تهافت هذا القول.', 'استخدم منهجية الاستقصاء بالرفع.']
                     }
                 ]
+            },
+            'اللغة الإنجليزية': {
+                exercises: [
+                    {
+                        content: 'Read the following text and answer the questions: (Text about Technology)',
+                        questions: ['What is the main idea of the text?', 'Are these statements True or False?', 'Find in the text words that are closest in meaning to: (Modern, Fast)'],
+                        points: 7,
+                        solutions: [{text: 'Technology in our lives', point: '2pts'}, {text: 'True/False correctly identified', point: '3pts'}, {text: 'Modern = New / Fast = Quick', point: '2pts'}]
+                    },
+                    {
+                        content: 'Choose the correct form of the verb between brackets.',
+                        questions: ['Yesterday, I (go) to the library.', 'He (study) for his exams right now.'],
+                        points: 5,
+                        solutions: [{text: 'Went', point: '2.5pts'}, {text: 'Is studying', point: '2.5pts'}]
+                    }
+                ],
+                situations: [
+                    {
+                        context: 'Write a short paragraph about the importance of learning English.',
+                        instructions: ['Use the provided cues.', 'Write between 8 and 10 lines.'],
+                        type: 'english_writing'
+                    }
+                ]
+            },
+            'العلوم الطبيعية': {
+                exercises: [
+                    {
+                        content: 'تمثل الوثيقة المقابلة مراحل عملية الهضم الكيميائي للبروتينات.',
+                        questions: ['سمِّ المحطات الموضحة في الوثيقة.', 'ما هو الناتج النهائي لهضم البروتينات؟'],
+                        points: 6,
+                        solutions: [{text: 'المعدة والمعي الدقيق', point: '3ن'}, {text: 'الأحماض الأمينية', point: '3ن'}]
+                    },
+                    {
+                        content: 'تعرض شخص لحادث أدى إلى قطع عصب حركي في رجله اليمنى.',
+                        questions: ['ما هي العواقب المتوقعة لهذا القطع؟', 'فسر سبب فقدان الحركة رغم سلامة العضلات.'],
+                        points: 6,
+                        solutions: [{text: 'شلل في الرجل اليمنى', point: '3ن'}, {text: 'لأن العصب هو الناقل للرسالة العصبية الحركية', point: '3ن'}]
+                    }
+                ]
+            },
+            'التاريخ والجغرافيا': {
+                exercises: [
+                    {
+                        content: 'اجب عن الأسئلة التالية المتعلقة بالثورة الجزائرية:',
+                        questions: ['حدد تاريخ اندلاع الثورة التحريرية.', 'ما هو الاسم الذي أطلق على بيان أول نوفمبر؟'],
+                        points: 6,
+                        solutions: [{text: '1 نوفمبر 1954', point: '3ن'}, {text: 'بيان أول نوفمبر', point: '3ن'}]
+                    }
+                ]
             }
         };
 
@@ -920,7 +1012,19 @@
 
             setTimeout(() => {
                 const subjectName = state.selectedSubject;
-                const data = mockData[subjectName] || mockData['الرياضيات'];
+                let data = mockData[subjectName];
+
+                if (!data) {
+                    // Educational fallback for missing subjects
+                    data = {
+                        exercises: [{
+                            content: `الموضوع الخاص بمادة ${subjectName} قيد التطوير حالياً في هذه النسخة التجريبية.`,
+                            questions: ['ترقبوا إضافة بنك الأسئلة الخاص بهذه المادة قريباً.'],
+                            points: 0
+                        }],
+                        situations: []
+                    };
+                }
 
                 // Prioritize fresh exercises
                 const freshExercises = data.exercises.filter(ex => !state.usedExercises.includes(ex.content.substring(0, 20)));
